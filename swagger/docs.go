@@ -1345,21 +1345,26 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Revokes one current user API key based on given key ID",
+                "description": "Revokes one current user API key based on given key ID.\nGiven a username instead of a key ID, revokes all API keys of that user.\nRevoking the API keys of a user requires accessControl.adminPolicy.",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Revokes one current user API key",
+                "summary": "Revokes one current user API key, or all API keys of a user",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "api token id (UUID)",
                         "name": "id",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "user whose api keys are all revoked (admin only)",
+                        "name": "username",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1377,6 +1382,12 @@ const docTemplate = `{
                     },
                     "401": {
                         "description": "unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "forbidden",
                         "schema": {
                             "type": "string"
                         }
